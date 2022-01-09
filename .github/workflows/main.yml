@@ -29,5 +29,5 @@ jobs:
       - name: Update version
         uses: brettdorrans/write-version-to-file@master
         with:
-          filename: '/version'
+          filename: 'version'
           placeholder: '${steps.version_by_tag.outputs.tag}'  
