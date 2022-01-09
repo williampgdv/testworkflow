@@ -21,8 +21,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Generate build number
+        id: buildnumber
+        uses: einaregilsson/build-number@v3 
+        with:
+          token: ${{secrets.github_token}}  
       - name: Get version and version code
         uses: xom9ikk/version-by-tag@v1
         id: version_by_tag
@@ -33,8 +36,9 @@ jobs:
           echo "Tag: ${{ steps.version_by_tag.outputs.tag }}"
           echo "Semver: ${{ steps.version_by_tag.outputs.semver }}"
           echo "Version code: ${{ steps.version_by_tag.outputs.versionCode }}"  
+          echo "Build number: ${{ steps.buildnumber.outputs.build_number }}"
           touch version
-          echo "${{ steps.version_by_tag.outputs.semver }}" >> version
+          echo "${{ steps.version_by_tag.outputs.semver }}-${{ steps.buildnumber.outputs.build_number }}" > version
       - name: Commit files # transfer the new html files back into the repository
         run: |
           git config --local user.name "githubaction"
