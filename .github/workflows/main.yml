@@ -28,9 +28,14 @@ jobs:
         id: version_by_tag
         with:
           isUseGithubRunNumber: true
+      - name: Some other action
+        run: |
+          echo "Tag: ${{ steps.version_by_tag.outputs.tag }}"
+          echo "Semver: ${{ steps.version_by_tag.outputs.semver }}"
+          echo "Version code: ${{ steps.version_by_tag.outputs.versionCode }}"  
       - name: Update version
         uses: DamianReeves/write-file-action@v1.0
         with:
           path: ${{env.home}}/version
-          contents: "${{ steps.version_by_tag.outputs.tag}}"
+          contents: "${{ steps.version_by_tag.outputs.semver }}"
           write-mode: overwrite
