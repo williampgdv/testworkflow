@@ -34,8 +34,8 @@ jobs:
           echo "Semver: ${{ steps.version_by_tag.outputs.semver }}"
           echo "Version code: ${{ steps.version_by_tag.outputs.versionCode }}"  
       - name: Update version
-        uses: DamianReeves/write-file-action
+        uses: DamianReeves/write-file-action@v1.0
         with:
-          path: ${{ env.home}}/version
+          path: ${{env.home}}/version
           contents: "${{ steps.version_by_tag.outputs.semver }}"
           write-mode: overwrite
