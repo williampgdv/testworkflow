@@ -33,9 +33,15 @@ jobs:
           echo "Tag: ${{ steps.version_by_tag.outputs.tag }}"
           echo "Semver: ${{ steps.version_by_tag.outputs.semver }}"
           echo "Version code: ${{ steps.version_by_tag.outputs.versionCode }}"  
-      - name: Update version
-        uses: DamianReeves/write-file-action@v1.0
+          touch version
+          echo "${{ steps.version_by_tag.outputs.semver }}" >> version
+      - name: Commit files # transfer the new html files back into the repository
+        run: |
+          git config --local user.name "githubaction"
+          git add ./version
+          git commit -m "Update version"
+      - name: Push changes # push the output folder to your repo
+        uses: ad-m/github-push-action@master
         with:
-          path: ${{env.home}}/version
-          contents: "${{ steps.version_by_tag.outputs.semver }}"
-          write-mode: overwrite
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          force: true
