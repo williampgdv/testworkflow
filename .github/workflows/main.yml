@@ -27,7 +27,8 @@ jobs:
         uses: xom9ikk/version-by-tag@v1
         id: version_by_tag
       - name: Update version
-        uses: brettdorrans/write-version-to-file@master
+        uses: DamianReeves/write-file-action
         with:
-          filename: '/version'
-          placeholder: '${steps.version_by_tag.outputs.tag}'  
+          path: ${{ env.home}}/version
+          contents: "${{ steps.version_by_tag.outputs.tag}}"
+          write-mode: overwrite
