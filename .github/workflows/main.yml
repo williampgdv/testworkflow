@@ -26,9 +26,11 @@ jobs:
       - name: Get version and version code
         uses: xom9ikk/version-by-tag@v1
         id: version_by_tag
-      - name: Update version
-        uses: DamianReeves/write-file-action
         with:
-          path: ${{ env.home}}/version
+          isUseGithubRunNumber: true
+      - name: Update version
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: ${{env.home}}/version
           contents: "${{ steps.version_by_tag.outputs.tag}}"
           write-mode: overwrite
