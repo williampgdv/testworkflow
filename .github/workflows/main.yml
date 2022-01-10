@@ -26,19 +26,23 @@ jobs:
         uses: einaregilsson/build-number@v3 
         with:
           token: ${{secrets.github_token}}  
-      - name: Get version and version code
-        uses: xom9ikk/version-by-tag@v1
-        id: version_by_tag
-        with:
-          isUseGithubRunNumber: true
-      - name: Some other action
+      - id: get_version
+        uses: battila7/get-version-action@v2
+#       - name: Get version and version code
+#         uses: xom9ikk/version-by-tag@v1
+#         id: version_by_tag
+#         with:
+#           isUseGithubRunNumber: true
+      - name: Print version
         run: |
-          echo "Tag: ${{ steps.version_by_tag.outputs.tag }}"
-          echo "Semver: ${{ steps.version_by_tag.outputs.semver }}"
-          echo "Version code: ${{ steps.version_by_tag.outputs.versionCode }}"  
+          echo "version: ${{ steps.get_version.outputs.version }}"
+      - name: Write version
+        run: |
+          [ -z "${{ steps.get_version.outputs.version }}" ] && git tag v1.0.0          
+          echo "version: v1.0.0"          
           echo "Build number: ${{ steps.buildnumber.outputs.build_number }}"
           touch version
-          echo "${{ steps.version_by_tag.outputs.semver }}-${{ steps.buildnumber.outputs.build_number }}" > version
+          [ -z "${{ steps.get_version.outputs.version }}" ] && echo "v1.0.0-${{ steps.buildnumber.outputs.build_number }}" > version || echo "${{ steps.get_version.outputs.version }}-${{ steps.buildnumber.outputs.build_number }}" > version
       - name: Commit files # transfer the new html files back into the repository
         run: |
           git config --local user.name "githubaction"
