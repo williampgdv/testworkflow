@@ -36,20 +36,13 @@ jobs:
       - name: Print version
         run: |
           echo "version: ${{ steps.get_version.outputs.version }}"
-      - name: Check version
+      - name: Write version
         run: |
-          [ -z "${{ steps.get_version.outputs.versio }}" ] git tag v1.0.0
-          
+          [ -z "${{ steps.get_version.outputs.version }}" ] && git tag v1.0.0          
           echo "version: v1.0.0"          
           echo "Build number: ${{ steps.buildnumber.outputs.build_number }}"
           touch version
-          echo "-${{ steps.buildnumber.outputs.build_number }}" > version
-      - name: Write version
-        run: |
-          echo "version: ${{ steps.get_version.outputs.version }}"          
-          echo "Build number: ${{ steps.buildnumber.outputs.build_number }}"
-          touch version
-          echo "${{ steps.get_version.outputs.version }}-${{ steps.buildnumber.outputs.build_number }}" > version
+          [ -z "${{ steps.get_version.outputs.version }}" ] && echo "v1.0.0-${{ steps.buildnumber.outputs.build_number }}" > version || echo "${{ steps.get_version.outputs.version }}-${{ steps.buildnumber.outputs.build_number }}" > version
       - name: Commit files # transfer the new html files back into the repository
         run: |
           git config --local user.name "githubaction"
