@@ -26,33 +26,33 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Generate build number
-        id: buildnumber
-        uses: einaregilsson/build-number@v3 
-        with:
-          token: ${{secrets.github_token}}  
-      - name: Get version and version code
-        uses: xom9ikk/version-by-tag@v1
-        id: version_by_tag
-        with:
-          isUseGithubRunNumber: true
-      - name: Print version
-        run: |
-          echo "version: ${{ steps.version_by_tag.outputs.semver }}"
-      - name: Write version
-        run: |
-          [ -z "${{ steps.version_by_tag.outputs.semver }}" ] && git tag v1.0.0          
-          echo "version: ${{ steps.version_by_tag.outputs.semver }}"          
-          echo "Build number: ${{ steps.buildnumber.outputs.build_number }}"
-          touch version
-          [ -z "${{ steps.version_by_tag.outputs.semver }}" ] && echo "v1.0.0-${{ steps.buildnumber.outputs.build_number }}" > version || echo "${{ steps.version_by_tag.outputs.semver }}-${{ steps.buildnumber.outputs.build_number }}" > version
-      - name: Commit files # transfer the new html files back into the repository
-        run: |
-          git config --local user.name "githubaction"
-          git add ./version
-          git commit -m "Update version"
-      - name: Push changes # push the output folder to your repo
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          force: true
+#       - name: Generate build number
+#         id: buildnumber
+#         uses: einaregilsson/build-number@v3 
+#         with:
+#           token: ${{secrets.github_token}}  
+#       - name: Get version and version code
+#         uses: xom9ikk/version-by-tag@v1
+#         id: version_by_tag
+#         with:
+#           isUseGithubRunNumber: true
+#       - name: Print version
+#         run: |
+#           echo "version: ${{ steps.version_by_tag.outputs.semver }}"
+#       - name: Write version
+#         run: |
+#           [ -z "${{ steps.version_by_tag.outputs.semver }}" ] && git tag v1.0.0          
+#           echo "version: ${{ steps.version_by_tag.outputs.semver }}"          
+#           echo "Build number: ${{ steps.buildnumber.outputs.build_number }}"
+#           touch version
+#           [ -z "${{ steps.version_by_tag.outputs.semver }}" ] && echo "v1.0.0-${{ steps.buildnumber.outputs.build_number }}" > version || echo "${{ steps.version_by_tag.outputs.semver }}-${{ steps.buildnumber.outputs.build_number }}" > version
+#       - name: Commit files # transfer the new html files back into the repository
+#         run: |
+#           git config --local user.name "githubaction"
+#           git add ./version
+#           git commit -m "Update version"
+#       - name: Push changes # push the output folder to your repo
+#         uses: ad-m/github-push-action@master
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           force: true
